@@ -1,0 +1,274 @@
+// import { useForm } from "react-hook-form";
+// import useAxiosSecure from "../../hooks/useAxiosSecure";
+
+// const RegistrationModal = ({ camp }) => {
+//     const { register, handleSubmit, reset } = useForm();
+//     const axiosSecure = useAxiosSecure();
+
+//     const onSubmit = async (data) => {
+//         const handleRegistration = async (registrationData) => {
+//             try {
+//                 const response = await axiosSecure.post('/register-camp', registrationData);
+//                 if (response.data.success) {
+//                     reset();
+//                     alert('Registration successful!');
+//                 }
+//             } catch (error) {
+//                 console.error('Registration failed:', error);
+//             }
+//         };
+//         handleRegistration(data);
+//     };
+
+//     return (
+//         <dialog id="registration-modal" className="modal">
+//             <form onSubmit={handleSubmit(onSubmit)} className="modal-box">
+//                 <h3 className="font-bold text-lg mb-4">Register for {camp.campName}</h3>
+//                 <div className="form-control">
+//                     <label className="label">Camp Name</label>
+//                     <input type="text" value={camp.campName} readOnly className="input input-bordered" />
+//                 </div>
+//                 <div className="form-control">
+//                     <label className="label">Fees</label>
+//                     <input type="text" value={camp.fees} readOnly className="input input-bordered" />
+//                 </div>
+//                 <div className="form-control">
+//                     <label className="label">Location</label>
+//                     <input type="text" value={camp.location} readOnly className="input input-bordered" />
+//                 </div>
+//                 <div className="form-control">
+//                     <label className="label">Healthcare Professional</label>
+//                     <input
+//                         type="text"
+//                         value={camp.healthcareProfessional}
+//                         readOnly
+//                         className="input input-bordered"
+//                     />
+//                 </div>
+//                 <div className="form-control">
+//                     <label className="label">Age</label>
+//                     <input
+//                         type="number"
+//                         {...register("age", { required: true })}
+//                         className="input input-bordered"
+//                         placeholder="Enter your age"
+//                     />
+//                 </div>
+//                 <div className="form-control">
+//                     <label className="label">Phone Number</label>
+//                     <input
+//                         type="tel"
+//                         {...register("phone", { required: true })}
+//                         className="input input-bordered"
+//                         placeholder="Enter your phone number"
+//                     />
+//                 </div>
+//                 <div className="form-control">
+//                     <label className="label">Gender</label>
+//                     <select {...register("gender", { required: true })} className="select select-bordered">
+//                         <option value="Male">Male</option>
+//                         <option value="Female">Female</option>
+//                         <option value="Other">Other</option>
+//                     </select>
+//                 </div>
+//                 <div className="form-control">
+//                     <label className="label">Emergency Contact</label>
+//                     <input
+//                         type="tel"
+//                         {...register("emergencyContact", { required: true })}
+//                         className="input input-bordered"
+//                         placeholder="Enter emergency contact"
+//                     />
+//                 </div>
+//                 <div className="modal-action">
+//                     <button type="submit" className="btn btn-primary">Register</button>
+//                     <button type="button" className="btn" onClick={() => document.getElementById("registration-modal").close()}>
+//                         Close
+//                     </button>
+//                 </div>
+//             </form>
+//         </dialog>
+//     );
+// };
+
+// export default RegistrationModal;
+
+import { motion } from "framer-motion";
+import { useForm } from "react-hook-form";
+import useAxiosSecure from "../../hooks/useAxiosSecure";
+
+export default function RegistrationModal({ camp }) {
+    const { register, handleSubmit, reset } = useForm();
+    const axiosSecure = useAxiosSecure();
+
+    const onSubmit = (data) => {
+        data.campId = camp._id;
+
+        const handleRegistration = async (registrationData) => {
+            try {
+                const response = await axiosSecure.post('/register-camp', registrationData);
+                if (response.data.success) {
+                    reset();
+                    alert('Registration successful!');
+                }
+            } catch (error) {
+                console.error('Registration failed:', error);
+            }
+        };
+        handleRegistration(data);
+
+        document.getElementById("registration-modal").close();
+    };
+
+    return (
+        <dialog
+            id="registration-modal"
+            className="modal modal-bottom sm:modal-middle"
+        >
+            <div
+                className="modal-box bg-base-100 p-6 rounded-lg shadow-lg"
+            >
+                <form
+                    onSubmit={handleSubmit(onSubmit)}
+                    className="space-y-4"
+                >
+                    <h2 className="text-2xl font-bold text-accent mb-4">
+                        Register for {camp.campName}
+                    </h2>
+
+                    {/* Read-Only Fields */}
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                        <div>
+                            <label className="label text-sm">Camp Name</label>
+                            <input
+                                type="text"
+                                {...register("campName", { required: true })}
+                                value={camp.campName}
+                                readOnly
+                                className="input input-bordered w-full"
+                            />
+                        </div>
+                        <div>
+                            <label className="label text-sm">Fees</label>
+                            <input
+                                type="text"
+                                {...register("campFees", { required: true })}
+                                value={camp.campFees}
+                                readOnly
+                                className="input input-bordered w-full"
+                            />
+                        </div>
+                        <div>
+                            <label className="label text-sm">Location</label>
+                            <input
+                                type="text"
+                                value={camp.location}
+                                readOnly
+                                className="input input-bordered w-full"
+                            />
+                        </div>
+                        <div>
+                            <label className="label text-sm">
+                                Healthcare Professional
+                            </label>
+                            <input
+                                type="text"
+                                value={camp.healthcareProfessional}
+                                readOnly
+                                className="input input-bordered w-full"
+                            />
+                        </div>
+                        <div>
+                            <label className="label text-sm">Participant's Name</label>
+                            <input
+                                type="text"
+                                {...register("participantName", { required: true })}
+                                value={camp.campName}
+                                readOnly
+                                className="input input-bordered w-full"
+                            />
+                        </div>
+
+                        <div>
+                            <label className="label text-sm">Participant's Email</label>
+                            <input
+                                type="text"
+                                {...register("participantEmail", { required: true })}
+                                value={camp.campName}
+                                readOnly
+                                className="input input-bordered w-full"
+                            />
+                        </div>
+                    </div>
+
+
+                    {/* Editable Fields */}
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                        <div>
+                            <label className="label text-sm">Age</label>
+                            <input
+                                type="number"
+                                {...register("age", { required: true })}
+                                placeholder="Enter your age"
+                                className="input input-bordered w-full"
+                            />
+                        </div>
+                        <div>
+                            <label className="label text-sm">Phone Number</label>
+                            <input
+                                type="text"
+                                {...register("phone", { required: true })}
+                                placeholder="Enter your phone number"
+                                className="input input-bordered w-full"
+                            />
+                        </div>
+                        <div>
+                            <label className="label text-sm">Gender</label>
+                            <select
+                                {...register("gender", { required: true })}
+                                className="select select-bordered w-full"
+                            >
+                                <option value="Male">Male</option>
+                                <option value="Female">Female</option>
+                                <option value="Other">Other</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label className="label text-sm">
+                                Emergency Contact
+                            </label>
+                            <input
+                                type="text"
+                                {...register("emergencyContact", { required: true })}
+                                placeholder="Enter emergency contact"
+                                className="input input-bordered w-full"
+                            />
+                        </div>
+                    </div>
+
+                    {/* Buttons */}
+                    <div className="modal-action mt-6 flex justify-end gap-4">
+                        <motion.button
+                            type="button"
+                            whileTap={{ scale: 0.95 }}
+                            className="btn btn-outline"
+                            onClick={() =>
+                                document.getElementById("registration-modal").close()
+                            }
+                        >
+                            Close
+                        </motion.button>
+                        <motion.button
+                            type="submit"
+                            whileTap={{ scale: 0.95 }}
+                            className="btn btn-accent text-white"
+                        >
+                            Register
+                        </motion.button>
+                    </div>
+                </form>
+            </div>
+        </dialog>
+    );
+}
+

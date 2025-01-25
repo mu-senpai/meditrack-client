@@ -1,5 +1,6 @@
 import { motion } from "framer-motion";
 import { FaMapMarkerAlt, FaUserMd, FaCalendarAlt, FaUsers } from "react-icons/fa";
+import { Link } from "react-router-dom";
 
 export default function CampCard({ camp }) {
     return (
@@ -34,12 +35,14 @@ export default function CampCard({ camp }) {
                     <span className="text-gray-400">{camp.participantCount} Participants</span>
                 </div>
                 <div className="card-actions mt-6">
-                    <motion.button
-                        className="btn btn-accent text-white w-full"
-                        whileTap={{ scale: 0.95 }}
-                    >
-                        Join Camp
-                    </motion.button>
+                    <Link className="w-full" to={`/camp-details/${camp._id}`}>
+                        <motion.button
+                            className="btn btn-accent text-white w-full"
+                            whileTap={{ scale: 0.95 }}
+                        >
+                            View Details
+                        </motion.button>
+                    </Link>
                 </div>
             </div>
         </motion.div>

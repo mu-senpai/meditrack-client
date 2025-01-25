@@ -8,6 +8,8 @@ import './index.css'
 
 createRoot(document.getElementById('root')).render(
   <StrictMode>
-    <RouterProvider router={routes} />
+    <div className='w-full min-[1920px]:max-w-[120rem] mx-auto'>
+      <RouterProvider router={routes} />
+    </div>
   </StrictMode>,
 )

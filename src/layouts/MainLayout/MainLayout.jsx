@@ -4,7 +4,7 @@ import CampCard from "../../components/CampCard/CampCard";
 
 const MainLayout = () => {
     return (
-        <div className="min-h-[300vh]">
+        <div>
             <Navbar></Navbar>
             <Outlet></Outlet>
             {/*  */}

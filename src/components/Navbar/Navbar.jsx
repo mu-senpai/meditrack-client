@@ -48,20 +48,11 @@ const Navbar = () => {
                 <>
                     <li>
                         <Link
-                            to={`/login`}
+                            to={`/auth/register`}
                             onClick={() => setIsMenuOpen(false)}
                             className="font-bold text-[#3b82f6] hover:text-blue-600 lg:btn lg:btn-sm lg:border-none lg:bg-gradient-to-r lg:from-blue-400 lg:to-[#3b82f6] lg:hover:from-blue-600 lg:hover:to-[#3b82f6] lg:text-white lg:hover:text-white"
                         >
-                            Login
-                        </Link>
-                    </li>
-                    <li>
-                        <Link
-                            to={`/register`}
-                            onClick={() => setIsMenuOpen(false)}
-                            className="font-bold text-[#3b82f6] hover:text-blue-600 lg:btn lg:btn-sm lg:border-none lg:bg-gradient-to-r lg:from-blue-400 lg:to-[#3b82f6] lg:hover:from-blue-600 lg:hover:to-[#3b82f6] lg:text-white lg:hover:text-white"
-                        >
-                            Register
+                            Join Us
                         </Link>
                     </li>
                 </>
@@ -89,7 +80,7 @@ const Navbar = () => {
                         Available Camps
                     </NavLink>
                 </li>
-                <li>
+                {/* <li>
                     <NavLink
                         to={`/about`}
                         onClick={() => setIsMenuOpen(false)}
@@ -110,7 +101,7 @@ const Navbar = () => {
                     >
                         Contact
                     </NavLink>
-                </li>
+                </li> */}
                 <li>
                     <button
                         onClick={() => {
@@ -129,7 +120,7 @@ const Navbar = () => {
 
     return (
         <nav
-            className={`w-full bg-transparent fixed top-0 z-50 transition-all duration-300 ${isScrolled ? 'bg-base-100 dark:bg-base-200' : 'text-white'}`}
+            className={`w-full min-[1920px]:max-w-[120rem] mx-auto bg-transparent fixed top-0 z-50 transition-all duration-300 ${isScrolled ? 'bg-base-100 dark:bg-base-200' : 'text-white'}`}
         >
             <div className="w-[97%] mx-auto flex justify-between items-center px-4 py-2 sm:py-3">
                 {/* Logo */}

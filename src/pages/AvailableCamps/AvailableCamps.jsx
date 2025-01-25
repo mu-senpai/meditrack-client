@@ -47,7 +47,11 @@ const AvailableCamps = () => {
                     </motion.h2>
                 </div>
                 <div className="h-full absolute top-0 right-0">
-                    <img className="h-full" src="https://i.ibb.co.com/JFhHWG8/image.png" />
+                    <motion.img
+                        initial={{ opacity: 0 }}
+                        animate={{ opacity: 1 }}
+                        transition={{ duration: 0.6 }}
+                        className="h-full" src="https://i.ibb.co.com/JFhHWG8/image.png" />
                 </div>
             </div>
 
