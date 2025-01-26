@@ -1,23 +1,23 @@
-import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
 import { useAxiosPublic } from "../../hooks/useAxiosPublic";
 import CampCard from "../../components/CampCard/CampCard";
+import { useQuery } from "@tanstack/react-query";
+import LoadingPage from "../../components/LoadingPage/LoadingPage";
 
 const AvailableCamps = () => {
-    const [camps, setCamps] = useState([]);
     const axiosPublic = useAxiosPublic();
 
-    useEffect(() => {
-        const fetchCamps = async () => {
-            try {
-                const response = await axiosPublic.get("/camps");
-                setCamps(response.data);
-            } catch (error) {
-                console.error("Error fetching camps:", error);
-            }
-        };
-        fetchCamps();
-    }, [axiosPublic]);
+    const { data: camps = {}, isLoading } = useQuery({
+        queryKey: ["camps"],
+        queryFn: async () => {
+            const res = await axiosPublic.get("/camps");
+            return res.data;
+        },
+    });
+
+    if (isLoading) {
+        return <LoadingPage></LoadingPage>;
+    }
 
     return (
         <motion.div

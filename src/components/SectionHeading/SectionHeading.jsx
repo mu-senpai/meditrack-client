@@ -1,6 +1,9 @@
 import { motion } from "framer-motion";
 
-export const SectionHeading = ({ title, description }) => {
+export const SectionHeading = (props = {}) => {
+
+    const { title, description } = props || {};
+
     return (
         <motion.div
             initial={{ opacity: 0 }}

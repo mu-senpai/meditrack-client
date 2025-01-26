@@ -7,6 +7,9 @@ import AvailableCamps from "../pages/AvailableCamps/AvailableCamps";
 import CampDetails from "../pages/CampDetails/CampDetails";
 import Login from "../pages/Login/Login";
 import SignUp from "../pages/SignUp/SignUp";
+import Dashboard from "../layouts/Dashboard/Dashboard";
+import ProfilePage from "../pages/ProfilePage/ProfilePage";
+import PrivateRoute from "./PrivateRoute";
 
 export const routes = createBrowserRouter([
     {
@@ -26,6 +29,16 @@ export const routes = createBrowserRouter([
             element: <CampDetails></CampDetails>
         }
       ]
+    },
+    {
+        path: "dashboard",
+        element: <PrivateRoute><Dashboard></Dashboard></PrivateRoute>,
+        children: [
+            {
+                path: "profile",
+                element: <ProfilePage></ProfilePage>,
+            }
+        ]
     },
     {
         path: "auth",

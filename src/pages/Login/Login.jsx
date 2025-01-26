@@ -1,12 +1,30 @@
 import { useForm } from "react-hook-form";
 import { motion } from "framer-motion";
-import { Link } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
+import { useContext } from "react";
+import { AuthContext } from "../../providers/AuthProvider";
+import Swal from "sweetalert2";
 
 const Login = () => {
     const { register, handleSubmit } = useForm();
+    const { signIn } = useContext(AuthContext);
+    const navigate = useNavigate();
+    const location = useLocation();
+
+    const from = location.state?.from?.pathname || "/";
 
     const onSubmit = (data) => {
-        console.log(data);
+        const { email, password } = data;
+        signIn(email, password)
+            .then(() => {
+                Swal.fire({
+                    icon: 'success',
+                    title: 'User Login Successful.',
+                    showConfirmButton: false,
+                    timer: 1500
+                });
+                navigate(from, { replace: true });
+            })
     };
 
     const handleGoogleLogin = () => {
@@ -30,7 +48,7 @@ const Login = () => {
                 />
                 <motion.img
                     initial={{ opacity: 0 }}
-                    animate={{ opacity: 1}}
+                    animate={{ opacity: 1 }}
                     transition={{ duration: 0.5 }}
                     className="absolute top-0 right-0 h-[50%] object-contain"
                     src="https://i.ibb.co/JFhHWG8/image.png"

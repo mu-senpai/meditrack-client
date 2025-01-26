@@ -2,7 +2,9 @@ import { motion } from "framer-motion";
 import { FaMapMarkerAlt, FaUserMd, FaCalendarAlt, FaUsers } from "react-icons/fa";
 import { Link } from "react-router-dom";
 
-export default function CampCard({ camp }) {
+export default function CampCard(props = {}) {
+    const { camp } = props || {};
+
     return (
         <motion.div
             className="card w-full bg-base-100 rounded-lg shadow-md hover:shadow-[0_4px_15px_rgba(0,211,187,0.5)] transition-shadow duration-300"

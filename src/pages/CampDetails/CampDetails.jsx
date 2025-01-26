@@ -1,29 +1,27 @@
-import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { motion } from "framer-motion";
 import { FaCalendarAlt, FaMapMarkerAlt, FaUserMd, FaDollarSign, FaUsers } from "react-icons/fa";
 import RegistrationModal from "./RegistrationModal";
 import useAxiosSecure from "../../hooks/useAxiosSecure";
+import { useQuery } from "@tanstack/react-query";
+import LoadingPage from "../../components/LoadingPage/LoadingPage";
 
 const CampDetails = () => {
     const { id } = useParams();
-    const [camp, setCamp] = useState(null);
 
     const axiosSecure = useAxiosSecure();
 
-    useEffect(() => {
-        const fetchCampDetails = async () => {
-            try {
-                const response = await axiosSecure.get(`/camps/${id}`);
-                setCamp(response.data);
-            } catch (error) {
-                console.error("Error fetching camp details:", error);
-            }
-        };
-        fetchCampDetails();
-    }, [id, axiosSecure]);
+    const { data: camp = {}, isLoading } = useQuery({
+        queryKey: ["campDetails", id],
+        queryFn: async () => {
+            const res = await axiosSecure.get(`/camps/${id}`);
+            return res.data;
+        },
+    });
 
-    if (!camp) return <div className="text-center py-16 text-lg">Loading...</div>;
+    if (isLoading) {
+        return <LoadingPage></LoadingPage>;
+    }
 
     return (
         <motion.div
