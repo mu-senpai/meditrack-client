@@ -107,8 +107,8 @@ const SignUp = () => {
                 };
 
                 try {
-                    const res = await axiosPublic.put('/users', userInfo);
-                    if (res.data.upsertedCount || res.data.modifiedCount) {
+                    const res = await axiosPublic.post('/users', userInfo);
+                    if (res.data.insertedId > 0 || res.data?.message) {
                         Swal.fire({
                             icon: 'success',
                             title: 'Logged in successfully!',

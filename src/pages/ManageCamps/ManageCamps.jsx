@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useContext, useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { useForm } from "react-hook-form";
 import { motion } from "framer-motion";
@@ -8,8 +8,10 @@ import useAxiosSecure from "../../hooks/useAxiosSecure";
 import Swal from "sweetalert2";
 import { FaEdit, FaTrash } from "react-icons/fa";
 import axios from "axios";
+import { AuthContext } from "../../providers/AuthProvider";
 
 const ManageCamps = () => {
+    const { user } = useContext(AuthContext);
     const axiosSecure = useAxiosSecure();
     const [selectedCamp, setSelectedCamp] = useState(null);
     const [startDate, setStartDate] = useState(new Date());
@@ -25,7 +27,7 @@ const ManageCamps = () => {
     const { data: camps = [], isLoading, refetch } = useQuery({
         queryKey: ["manageCamps"],
         queryFn: async () => {
-            const res = await axiosSecure.get("/camps");
+            const res = await axiosSecure.get(`/camps/${user.email}`);
             return res.data;
         },
     });
@@ -38,6 +40,7 @@ const ManageCamps = () => {
             location: data.location,
             healthcareProfessional: data.healthcareProfessional,
             campFees: parseFloat(data.campFees),
+            organizerEmail: user.email
         };
 
         if (data.image[0]) {

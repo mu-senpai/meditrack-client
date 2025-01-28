@@ -3,6 +3,7 @@ import { motion } from "framer-motion";
 import { useQuery } from "@tanstack/react-query";
 import Swal from "sweetalert2";
 import { FaMoneyCheckAlt, FaCommentAlt, FaTrash } from "react-icons/fa";
+import ReactStars from "react-rating-stars-component";
 import useAxiosSecure from "../../hooks/useAxiosSecure";
 import { AuthContext } from "../../providers/AuthProvider";
 import { Link } from "react-router-dom";
@@ -10,7 +11,8 @@ import { Link } from "react-router-dom";
 const RegisteredCamps = () => {
     const { user } = useContext(AuthContext);
     const axiosSecure = useAxiosSecure();
-    const [loading, setLoading] = useState(false);
+    // const [loading, setLoading] = useState(false);
+    const [rating, setRating] = useState(0);
 
     const { data: registeredCamps = [], isLoading, refetch } = useQuery({
         queryKey: ["registeredCamps"],
@@ -51,26 +53,73 @@ const RegisteredCamps = () => {
         });
     };
 
-    // Handle feedback
-    const handleFeedback = async (campId) => {
+    const handleFeedback = async (campId, campName) => {
         const { value: feedback } = await Swal.fire({
             title: "Submit your feedback",
+            html: `
+                    <div class="mb-4 text-center">
+                        <span class="text-lg font-semibold">Your Rating:</span>
+                        <div id="star-rating" class="flex justify-center mt-2 gap-2">
+                            ${[1, 2, 3, 4, 5]
+                    .map(
+                        (star) =>
+                            `<span class="star cursor-pointer text-4xl text-gray-300" data-value="${star}">★</span>`
+                    )
+                    .join("")}
+                        </div>
+                    </div>
+                `,
             input: "textarea",
             inputPlaceholder: "Write your feedback here...",
+            inputClass: "w-full p-2 border rounded-lg",
             showCancelButton: true,
             confirmButtonText: "Submit",
+            customClass: {
+                popup: "rounded-lg shadow-lg p-6",
+                confirmButton: "bg-accent text-white px-4 py-2 rounded-lg",
+                cancelButton: "bg-gray-200 text-gray-700 px-4 py-2 rounded-lg",
+            },
+            didOpen: () => {
+                const stars = document.querySelectorAll(".star");
+                stars.forEach((star) => {
+                    star.addEventListener("click", () => {
+                        const value = parseInt(star.getAttribute("data-value"), 10);
+                        setRating(value);
+                        stars.forEach((s) => s.classList.replace("text-yellow-400", "text-gray-300")); 
+                        for (let i = 0; i < value; i++) {
+                            stars[i].classList.replace("text-gray-300", "text-yellow-400");
+                        }
+                    });
+                });
+            },
         });
 
-        if (feedback) {
+
+        if (feedback && rating) {
+
+            const feedbackInfo = {
+                name: user.displayName,
+                photo: user.photoURL,
+                email: user.email,
+                feedback,
+                rating,
+                campName
+            }
+
             try {
-                await axiosSecure.patch(`/update-feedback/${campId}`, { feedback });
-                refetch();
-                Swal.fire({
-                    icon: "success",
-                    title: "Feedback submitted successfully!",
-                    showConfirmButton: false,
-                    timer: 1500,
-                });
+                axiosSecure.post(`/feedback`, feedbackInfo)
+                .then(() => {
+                    axiosSecure.patch(`/update-feedback/${campId}`, { feedback: true })
+                    .then(() => {
+                        refetch();
+                        Swal.fire({
+                            icon: "success",
+                            title: "Feedback submitted successfully!",
+                            showConfirmButton: false,
+                            timer: 1500,
+                        });
+                    })
+                })
             } catch (error) {
                 Swal.fire({
                     icon: "error",
@@ -98,8 +147,8 @@ const RegisteredCamps = () => {
                 className="text-2xl sm:text-3xl xl:text-4xl text-accent font-bold text-center mb-6 sm:mb-8 lg:mb-10 xl:mb-12">
                 Registered Camps
             </motion.h2>
-            <div className="w-full overflow-x-auto">
-                <table className="table w-full border border-base-300">
+            <div className="overflow-x-auto">
+                <table className="table border border-base-300">
                     <thead>
                         <tr>
                             <th>#</th>
@@ -152,7 +201,7 @@ const RegisteredCamps = () => {
                                     {camp.paymentStatus === "Paid" && (
                                         <button
                                             className="btn btn-sm btn-primary text-white"
-                                            onClick={() => handleFeedback(camp._id)}
+                                            onClick={() => handleFeedback(camp._id, camp.campName)}
                                             disabled={camp.status !== "Approved" || camp.feedback}
                                         >
                                             <FaCommentAlt /> {camp.feedback ? "Feedback Given" : "Feedback"}

@@ -93,6 +93,7 @@ const RegisteredCampsManagement = () => {
                                         <button
                                             className="btn btn-sm btn-success text-white"
                                             onClick={() => handleStatusUpdate(registration._id, "Approved", registration.campId)}
+                                            disabled={registration.paymentStatus === "Unpaid"}
                                         >
                                             <FaCheck /> Approve
                                         </button>

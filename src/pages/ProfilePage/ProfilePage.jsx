@@ -84,7 +84,7 @@ const ProfilePage = () => {
         );
 
     return (
-        <div className="flex items-center justify-center h-full bg-base-200">
+        <div className="w-full flex flex-col items-center justify-center h-full bg-base-200">
             <motion.div
                 className="max-w-md w-[90%] sm:w-full"
                 initial={{ opacity: 0, scale: 0.95 }}

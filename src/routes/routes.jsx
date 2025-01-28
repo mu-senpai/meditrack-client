@@ -19,11 +19,13 @@ import PaymentGateway from "../pages/PaymentPage/PaymentGateway";
 import UserAnalytics from "../pages/UserAnalytics/UserAnalytics";
 import AdminRoute from "./AdminRoute";
 import UserRoute from "./UserRoute";
+import ErrorPage from "../pages/ErrorPage/ErrorPage";
 
 export const routes = createBrowserRouter([
     {
       path: "/",
       element: <MainLayout></MainLayout>,
+      errorElement: <ErrorPage></ErrorPage>,
       children: [
         {
             path: "/",
@@ -42,6 +44,7 @@ export const routes = createBrowserRouter([
     {
         path: "dashboard",
         element: <PrivateRoute><Dashboard></Dashboard></PrivateRoute>,
+        errorElement: <ErrorPage></ErrorPage>,
         children: [
             {
                 path: "profile",
@@ -79,6 +82,7 @@ export const routes = createBrowserRouter([
     },
     {
         path: "auth",
+        errorElement: <ErrorPage></ErrorPage>,
         children: [
             {
                 path: "login",

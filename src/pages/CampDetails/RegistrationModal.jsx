@@ -148,6 +148,7 @@ export default function RegistrationModal(props = {}) {
                             <label className="label text-sm">Phone Number</label>
                             <input
                                 type="text"
+                                defaultValue={userData.phone}
                                 {...register("phone", { required: true })}
                                 placeholder="Enter your phone number"
                                 className="input input-bordered w-full"

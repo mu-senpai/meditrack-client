@@ -1,21 +1,28 @@
 import { useContext, useState } from "react";
-import { Link, NavLink, Outlet } from "react-router-dom";
+import { Link, NavLink, Outlet, useNavigate } from "react-router-dom";
 import {
     FaHome,
     FaUser,
-    FaCog,
     FaSignOutAlt,
     FaBars,
     FaHandHoldingMedical,
+    FaChartBar,
+    FaPlus,
+    FaClipboardList,
+    FaMoneyCheckAlt,
+    FaTasks
 } from "react-icons/fa";
 import { AuthContext } from "../../providers/AuthProvider";
 import useAxiosSecure from "../../hooks/useAxiosSecure";
 import { useQuery } from "@tanstack/react-query";
+import useAdmin from "../../hooks/useAdmin";
 
 const Dashboard = () => {
     const [isSidebarOpen, setIsSidebarOpen] = useState(false);
-    const { user } = useContext(AuthContext);
+    const { user, logOut } = useContext(AuthContext);
+    const [isAdmin] = useAdmin();
     const axiosSecure = useAxiosSecure();
+    const navigate = useNavigate();
 
     const { data: userData = {}, refetch } = useQuery({
         queryKey: ["userProfile", user?.email],
@@ -27,22 +34,36 @@ const Dashboard = () => {
         enabled: !!user?.email,
     });
 
+    const handleLogout = () => {
+        logOut()
+            .then(() => {
+                setTimeout(() => {
+                    navigate('/');
+                }, 5);
+            })
+            .catch((error) => {
+                Swal.fire({
+                    title: 'Error!',
+                    text: `${error.code}`,
+                    icon: 'error',
+                    confirmButtonText: 'Close'
+                })
+            });
+    }
+
     const toggleSidebar = () => {
         setIsSidebarOpen(!isSidebarOpen);
     };
 
     return (
-        <div className="flex min-h-screen bg-base-200">
+        <div className="w-full h-screen min-h-screen bg-base-200">
             {/* Sidebar */}
             <div
                 className={`fixed top-0 left-0 z-50 h-screen bg-accent text-white w-64 lg:w-72 transform ${isSidebarOpen ? "translate-x-0" : "-translate-x-full"
                     } lg:translate-x-0 transition-transform duration-300`}
             >
-                <div className="flex items-center justify-between p-4 shadow-[0_4px_6px_-3px_rgba(0,0,0,0.1)] ">
-                    <Link
-                        to="/"
-                        className={`text-2xl text-white font-rubik items-center gap-2 font-semibold hidden lg:inline-flex`}
-                    >
+                <div className="flex items-center justify-between p-4 shadow-md">
+                    <Link to="/" className="text-2xl text-white font-semibold hidden lg:flex items-center gap-2">
                         <FaHandHoldingMedical />
                         MediTrack
                     </Link>
@@ -54,54 +75,57 @@ const Dashboard = () => {
                         ✕
                     </button>
                 </div>
+
                 <nav className="mt-4 space-y-1">
-                    <NavLink
-                        to="/dashboard"
-                        className={({ isActive }) =>
-                            `flex items-center p-4 rounded-md hover:bg-accent-focus ${isActive ? "bg-accent-focus" : ""
-                            }`
-                        }
-                    >
-                        <FaHome className="mr-3" />
-                        Home
+                    {/* Common for both Admin & User */}
+                    <NavLink to="/" className="flex items-center p-4 rounded-md hover:bg-accent-focus">
+                        <FaHome className="mr-3" /> Home
                     </NavLink>
-                    <NavLink
-                        to="/dashboard/profile"
-                        className={({ isActive }) =>
-                            `flex items-center p-4 rounded-md hover:bg-accent-focus ${isActive ? "bg-accent-focus" : ""
-                            }`
-                        }
-                    >
-                        <FaUser className="mr-3" />
-                        Profile
+                    <NavLink to="/dashboard/profile" className="flex items-center p-4 rounded-md hover:bg-accent-focus">
+                        <FaUser className="mr-3" /> Profile
                     </NavLink>
-                    <NavLink
-                        to="/dashboard/settings"
-                        className={({ isActive }) =>
-                            `flex items-center p-4 rounded-md hover:bg-accent-focus ${isActive ? "bg-accent-focus" : ""
-                            }`
-                        }
-                    >
-                        <FaCog className="mr-3" />
-                        Settings
-                    </NavLink>
-                    <button className="flex items-center p-4 rounded-md hover:bg-accent-focus">
-                        <FaSignOutAlt className="mr-3" />
-                        Sign Out
+
+                    {/* Admin Routes */}
+                    {isAdmin ? (
+                        <>
+                            <NavLink to="/dashboard/add-camp" className="flex items-center p-4 rounded-md hover:bg-accent-focus">
+                                <FaPlus className="mr-3" /> Add Camp
+                            </NavLink>
+                            <NavLink to="/dashboard/manage-camps" className="flex items-center p-4 rounded-md hover:bg-accent-focus">
+                                <FaClipboardList className="mr-3" /> Manage Camps
+                            </NavLink>
+                            <NavLink to="/dashboard/registered-camps-management" className="flex items-center p-4 rounded-md hover:bg-accent-focus">
+                                <FaTasks className="mr-3" /> Manage Registrations
+                            </NavLink>
+                        </>
+                    ) : (
+                        <>
+                            {/* User Routes */}
+                            <NavLink to="/dashboard/registered-camps" className="flex items-center p-4 rounded-md hover:bg-accent-focus">
+                                <FaClipboardList className="mr-3" /> Registered Camps
+                            </NavLink>
+                            <NavLink to="/dashboard/payment-history" className="flex items-center p-4 rounded-md hover:bg-accent-focus">
+                                <FaMoneyCheckAlt className="mr-3" /> Payment History
+                            </NavLink>
+                            <NavLink to="/dashboard/analytics" className="flex items-center p-4 rounded-md hover:bg-accent-focus">
+                                <FaChartBar className="mr-3" /> Analytics
+                            </NavLink>
+                        </>
+                    )}
+
+                    <button onClick={handleLogout} className="flex cursor-pointer items-center p-4 rounded-md hover:bg-accent-focus">
+                        <FaSignOutAlt className="mr-3" /> Logout
                     </button>
                 </nav>
             </div>
 
             {/* Main Content */}
-            <div className="flex-1 w-full lg:w-auto flex flex-col lg:ml-72">
+            <div className="w-full h-full flex flex-col lg:pl-72">
                 {/* Top Navbar */}
                 <div className="w-full bg-accent shadow-md sticky top-0 z-40">
                     <div className="w-[95%] mx-auto navbar">
                         <div className="flex items-center">
-                            <Link
-                                to="/"
-                                className={`text-2xl text-white font-rubik items-center gap-2 font-semibold lg:hidden inline-flex`}
-                            >
+                            <Link to="/" className="text-2xl text-white font-semibold lg:hidden inline-flex">
                                 <FaHandHoldingMedical />
                                 MediTrack
                             </Link>
@@ -129,57 +153,12 @@ const Dashboard = () => {
                                         d="M21.64,13a1,1,0,0,0-1.05-.14,8.05,8.05,0,0,1-3.37.73A8.15,8.15,0,0,1,9.08,5.49a8.59,8.59,0,0,1,.25-2A1,1,0,0,0,8,2.36,10.14,10.14,0,1,0,22,14.05,1,1,0,0,0,21.64,13Zm-9.5,6.69A8.14,8.14,0,0,1,7.08,5.22v.27A10.15,10.15,0,0,0,17.22,15.63a9.79,9.79,0,0,0,2.1-.22A8.11,8.11,0,0,1,12.14,19.73Z" fill="#ffffff" />
                                 </svg>
                             </label>
-
-                            <Link
-                                to="/dashboard/profile"
-                                tabIndex={0}
-                                className="avatar cursor-pointer flex items-center space-x-2"
-                            >
+                            <Link to="/dashboard/profile" className="avatar cursor-pointer flex items-center space-x-2">
                                 <div className="w-7 lg:w-10 rounded-full">
-                                    <img
-                                        src={userData?.photoURL || "https://via.placeholder.com/150"}
-                                        alt="User Avatar"
-                                    />
+                                    <img src={userData?.photoURL || "https://via.placeholder.com/150"} alt="User Avatar" />
                                 </div>
                             </Link>
-
-                            <div className="dropdown dropdown-end">
-                                <button className="btn btn-sm btn-ghost btn-circle ">
-                                    <div className="indicator">
-                                        <svg
-                                            xmlns="http://www.w3.org/2000/svg"
-                                            className="h-6 lg:h-7 w-6 lg:w-7"
-                                            fill="none"
-                                            viewBox="0 0 24 24"
-                                            stroke="#FFFFFF">
-                                            <path
-                                                strokeLinecap="round"
-                                                strokeLinejoin="round"
-                                                strokeWidth="2"
-                                                d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9" />
-                                        </svg>
-                                        <span className="badge badge-sm indicator-item">0</span>
-                                    </div>
-                                </button>
-                                <ul
-                                    tabIndex={0}
-                                    className="menu menu-compact dropdown-content mt-3 p-2 shadow bg-base-100 rounded-box w-52"
-                                >
-                                    <li>
-                                        <a>Notification 1</a>
-                                    </li>
-                                    <li>
-                                        <a>Notification 2</a>
-                                    </li>
-                                    <li>
-                                        <a>Notification 3</a>
-                                    </li>
-                                </ul>
-                            </div>
-                            <button
-                                className="btn btn-sm btn-ghost btn-circle lg:hidden text-xl"
-                                onClick={toggleSidebar}
-                            >
+                            <button className="btn btn-sm btn-ghost btn-circle lg:hidden text-xl" onClick={toggleSidebar}>
                                 <FaBars color="#FFFFFF" />
                             </button>
                         </div>
@@ -188,8 +167,6 @@ const Dashboard = () => {
 
                 {/* Content Area */}
                 <div className="w-full h-full relative">
-                    <img src="https://i.ibb.co/NKHxZk7/image-1.png" className="absolute w-[70%] sm:w-[60%] md:w-[50%] xl:w-[40%] top-0 right-0 object-contain z-0" />
-                    <img src="https://i.ibb.co/zx4jMD3/image.png" className="absolute w-[60%] sm:w-[50%] md:w-[40%] xl:w-[30%] bottom-0 left-0 z-0" />
                     <section className="w-full h-full z-10">
                         <Outlet />
                     </section>

@@ -48,14 +48,14 @@ const PopularCamps = () => {
 
     return (
         <motion.div
-            className="w-[90%] mx-auto py-8 sm:py-12 md:py-14 xl:py-16"
+            className="w-[90%] mx-auto py-10 sm:py-14 md:py-18 xl:py-20 2xl:py-24"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ duration: 0.5 }}
         >
             <SectionHeading
-                title="Popular Camps"
-                description="Explore our most popular camps that have transformed thousands of lives."
+                title="Our Popular Camps"
+                description="Explore our most popular camps that have transformed thousands of lives"
             />
 
             {popularCamps.length > 0 ? (

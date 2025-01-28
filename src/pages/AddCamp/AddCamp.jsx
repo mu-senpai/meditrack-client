@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useContext, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { motion } from 'framer-motion';
 import axios from 'axios';
@@ -6,8 +6,10 @@ import Swal from 'sweetalert2';
 import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
 import useAxiosSecure from '../../hooks/useAxiosSecure';
+import { AuthContext } from '../../providers/AuthProvider';
 
 const AddCamp = () => {
+    const { user } = useContext(AuthContext);
     const { register, handleSubmit, reset } = useForm();
     const [startDate, setStartDate] = useState(new Date());
     const axiosSecure = useAxiosSecure();
@@ -28,6 +30,7 @@ const AddCamp = () => {
                     image: imgRes.data.data.display_url,
                     dateAndTime: startDate,
                     participantCount: 0,
+                    organizerEmail: user.email
                 };
                 const res = await axiosSecure.post('/camps', campData);
                 if (res.data.success) {
