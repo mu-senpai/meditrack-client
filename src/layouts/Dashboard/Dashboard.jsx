@@ -6,6 +6,7 @@ import {
     FaCog,
     FaSignOutAlt,
     FaBars,
+    FaHandHoldingMedical,
 } from "react-icons/fa";
 import { AuthContext } from "../../providers/AuthProvider";
 import useAxiosSecure from "../../hooks/useAxiosSecure";
@@ -31,14 +32,20 @@ const Dashboard = () => {
     };
 
     return (
-        <div className="flex h-screen bg-base-200">
+        <div className="flex min-h-screen bg-base-200">
             {/* Sidebar */}
             <div
-                className={`fixed top-0 left-0 z-50 h-full bg-accent text-white w-64 lg:w-72 transform ${isSidebarOpen ? "translate-x-0" : "-translate-x-full"
+                className={`fixed top-0 left-0 z-50 h-screen bg-accent text-white w-64 lg:w-72 transform ${isSidebarOpen ? "translate-x-0" : "-translate-x-full"
                     } lg:translate-x-0 transition-transform duration-300`}
             >
                 <div className="flex items-center justify-between p-4 shadow-[0_4px_6px_-3px_rgba(0,0,0,0.1)] ">
-                    <Link to={`/`} className="text-2xl font-bold hidden lg:block">MediTrack</Link>
+                    <Link
+                        to="/"
+                        className={`text-2xl text-white font-rubik items-center gap-2 font-semibold hidden lg:inline-flex`}
+                    >
+                        <FaHandHoldingMedical />
+                        MediTrack
+                    </Link>
                     <h2 className="text-2xl font-bold lg:hidden">Dashboard</h2>
                     <button
                         className="btn btn-ghost btn-circle lg:hidden text-white text-2xl"
@@ -86,12 +93,18 @@ const Dashboard = () => {
             </div>
 
             {/* Main Content */}
-            <div className="flex-1 flex flex-col lg:ml-72">
+            <div className="flex-1 w-full lg:w-auto flex flex-col lg:ml-72">
                 {/* Top Navbar */}
-                <div className="bg-accent shadow-md sticky top-0 z-40">
+                <div className="w-full bg-accent shadow-md sticky top-0 z-40">
                     <div className="w-[95%] mx-auto navbar">
                         <div className="flex items-center">
-                            <Link to={`/`} className="text-2xl font-bold text-white lg:hidden">MediTrack</Link>
+                            <Link
+                                to="/"
+                                className={`text-2xl text-white font-rubik items-center gap-2 font-semibold lg:hidden inline-flex`}
+                            >
+                                <FaHandHoldingMedical />
+                                MediTrack
+                            </Link>
                         </div>
                         <div className="flex items-center space-x-2 lg:space-x-4 ml-auto">
                             <label className="swap swap-rotate">
@@ -174,8 +187,12 @@ const Dashboard = () => {
                 </div>
 
                 {/* Content Area */}
-                <div className="h-full">
-                    <Outlet />
+                <div className="w-full h-full relative">
+                    <img src="https://i.ibb.co/NKHxZk7/image-1.png" className="absolute w-[70%] sm:w-[60%] md:w-[50%] xl:w-[40%] top-0 right-0 object-contain z-0" />
+                    <img src="https://i.ibb.co/zx4jMD3/image.png" className="absolute w-[60%] sm:w-[50%] md:w-[40%] xl:w-[30%] bottom-0 left-0 z-0" />
+                    <section className="w-full h-full z-10">
+                        <Outlet />
+                    </section>
                 </div>
             </div>
         </div>

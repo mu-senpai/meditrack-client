@@ -10,6 +10,15 @@ import SignUp from "../pages/SignUp/SignUp";
 import Dashboard from "../layouts/Dashboard/Dashboard";
 import ProfilePage from "../pages/ProfilePage/ProfilePage";
 import PrivateRoute from "./PrivateRoute";
+import AddCamp from "../pages/AddCamp/AddCamp";
+import ManageCamps from "../pages/ManageCamps/ManageCamps";
+import RegisteredCamps from "../pages/RegisteredCamps/RegisteredCamps";
+import RegisteredCampsManagement from "../pages/RegisteredCampsManagement/RegisteredCampsManagement";
+import PaymentHistory from "../pages/PaymentHistory/PaymentHistory";
+import PaymentGateway from "../pages/PaymentPage/PaymentGateway";
+import UserAnalytics from "../pages/UserAnalytics/UserAnalytics";
+import AdminRoute from "./AdminRoute";
+import UserRoute from "./UserRoute";
 
 export const routes = createBrowserRouter([
     {
@@ -37,6 +46,34 @@ export const routes = createBrowserRouter([
             {
                 path: "profile",
                 element: <ProfilePage></ProfilePage>,
+            },
+            {
+                path: "add-camp",
+                element: <AdminRoute><AddCamp></AddCamp></AdminRoute>,
+            },
+            {
+                path: "manage-camps",
+                element: <AdminRoute><ManageCamps></ManageCamps></AdminRoute>,
+            },
+            {
+                path: "registered-camps",
+                element: <UserRoute><RegisteredCamps></RegisteredCamps></UserRoute>
+            },
+            {
+                path: "registered-camps-management",
+                element: <AdminRoute><RegisteredCampsManagement></RegisteredCampsManagement></AdminRoute>,
+            },
+            {
+                path: "payment-history",
+                element: <UserRoute><PaymentHistory></PaymentHistory></UserRoute>,
+            },
+            {
+                path: "payment",
+                element: <UserRoute><PaymentGateway></PaymentGateway></UserRoute>,
+            },
+            {
+                path: "analytics",
+                element: <UserRoute><UserAnalytics></UserAnalytics></UserRoute>,
             }
         ]
     },

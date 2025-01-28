@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
+import { Link } from "react-router-dom";
 
 export default function BannerCarousel() {
   const slides = [
@@ -7,13 +8,11 @@ export default function BannerCarousel() {
       backgroundImage: "https://i.ibb.co.com/s2Nqw7r/image.png",
       tagline: "Making Healthcare Accessible for All",
       description: "Over 10,000 lives transformed through 500+ medical camps worldwide.",
-      cta: "Explore Camps",
     },
     {
       backgroundImage: "https://i.ibb.co.com/8g7KLpc/image.png",
       tagline: "Join the Movement for Better Health",
       description: "Providing care in 30+ countries with millions of smiles delivered.",
-      cta: "Read Success Stories",
     },
   ];
 
@@ -58,14 +57,16 @@ export default function BannerCarousel() {
                   >
                     {slide.description}
                   </motion.p>
-                  <motion.button
-                    className="btn btn-accent text-white px-6 py-3 text-lg font-semibold"
-                    initial={{ scale: 0.8, opacity: 0 }}
-                    animate={{ scale: 1, opacity: 1 }}
-                    transition={{ delay: 0.6, duration: 0.8 }}
-                  >
-                    {slide.cta}
-                  </motion.button>
+                  <Link to={`/available-camps`}>
+                    <motion.button
+                        className="btn btn-accent text-white px-6 py-3 text-lg font-semibold"
+                        initial={{ scale: 0.8, opacity: 0 }}
+                        animate={{ scale: 1, opacity: 1 }}
+                        transition={{ delay: 0.6, duration: 0.8 }}
+                    >
+                        Explore Camps
+                    </motion.button>
+                  </Link>
                 </div>
               </motion.div>
             )

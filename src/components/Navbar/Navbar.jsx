@@ -2,6 +2,7 @@ import { useContext, useEffect, useState } from "react";
 import { Link, NavLink, useLocation, useNavigate } from "react-router-dom";
 import Swal from "sweetalert2";
 import { AuthContext } from "../../providers/AuthProvider";
+import { FaHandHoldingMedical, FaUser } from "react-icons/fa";
 
 const Navbar = () => {
 
@@ -68,7 +69,7 @@ const Navbar = () => {
             </li>
             {!user ? (
                 <>
-                    <li>
+                    {/* <li>
                         <Link
                             to={`/auth/signup`}
                         >
@@ -77,33 +78,33 @@ const Navbar = () => {
                                 className="font-bold lg:btn lg:btn-sm lg:btn-accent lg:text-white lg:border-none"
                             >Join Us</button>
                         </Link>
-                    </li>
+                    </li> */}
                 </>
             ) : (
                 <>
                     {/* <li>
-                    <NavLink
-                        to={`/about`}
-                        onClick={() => setIsMenuOpen(false)}
-                        className={({ isActive }) =>
-                            `${isActive ? "text-accent" : "hover:text-accent"}`
-                        }
-                    >
-                        About Us
-                    </NavLink>
-                </li>
-                <li>
-                    <NavLink
-                        to={`/contact`}
-                        onClick={() => setIsMenuOpen(false)}
-                        className={({ isActive }) =>
-                            `${isActive ? "text-accent" : "hover:text-accent"}`
-                        }
-                    >
-                        Contact
-                    </NavLink>
-                </li> */}
+                        <NavLink
+                            to={`/about`}
+                            onClick={() => setIsMenuOpen(false)}
+                            className={({ isActive }) =>
+                                `${isActive ? "text-accent" : "hover:text-accent"}`
+                            }
+                        >
+                            About Us
+                        </NavLink>
+                    </li>
                     <li>
+                        <NavLink
+                            to={`/contact`}
+                            onClick={() => setIsMenuOpen(false)}
+                            className={({ isActive }) =>
+                                `${isActive ? "text-accent" : "hover:text-accent"}`
+                            }
+                        >
+                            Contact
+                        </NavLink>
+                    </li> */}
+                    {/* <li>
                         <button
                             onClick={() => {
                                 handleLogout();
@@ -113,7 +114,7 @@ const Navbar = () => {
                         >
                             Log Out
                         </button>
-                    </li>
+                    </li> */}
                 </>
             )}
         </>
@@ -121,14 +122,15 @@ const Navbar = () => {
 
     return (
         <nav
-            className={`w-full min-[1920px]:max-w-[120rem] mx-auto fixed top-0 z-50 transition-all duration-300 ${isScrolled ? 'bg-base-100 dark:bg-base-200' : 'bg-transparent text-white'}`}
+            className={`w-full min-[1920px]:max-w-[120rem] mx-auto fixed top-0 z-50 transition-all duration-300 ${isScrolled ? 'bg-base-200' : 'bg-transparent text-white'}`}
         >
             <div className="w-[97%] mx-auto flex justify-between items-center px-4 py-2 sm:py-3">
                 {/* Logo */}
                 <Link
                     to="/"
-                    className={`text-2xl text-accent md:text-3xl inline-flex items-center gap-2 font-bold`}
+                    className={`text-2xl text-accent md:text-3xl font-rubik inline-flex items-center gap-2 font-semibold`}
                 >
+                    <FaHandHoldingMedical />
                     MediTrack
                 </Link>
 
@@ -161,8 +163,8 @@ const Navbar = () => {
 
                     {NavigationList}
 
-                    {(user &&
-                        <div className="dropdown dropdown-end">
+                    {(user ?
+                        (<div className="dropdown dropdown-end">
                             <div tabIndex={0} role="button" className="btn btn-ghost btn-circle avatar">
                                 <div className="w-10 rounded-full">
                                     <img
@@ -170,17 +172,43 @@ const Navbar = () => {
                                         src={user.photoURL} />
                                 </div>
                             </div>
-                            <ul
+                            <div
                                 tabIndex={0}
-                                className="menu menu-sm dropdown-content bg-base-100 text-black rounded-[10px] z-[1] mt-3 w-72 p-3 shadow">
-                                <p>User Name: {user.displayName}</p>
-                                <p>Email: {user.email}</p>
-                            </ul>
-                        </div>
+                                className="card card-compact dropdown-content bg-base-100 text-base-content z-1 mt-3 w-52 shadow">
+                                <div className="card-body p-4">
+                                    <div className="card-actions">
+                                        <button className="btn btn-ghost btn-block">
+                                            <FaUser /> {user.displayName.split(" ")[0]}
+                                        </button>
+                                    </div>
+                                    <Link to={`/dashboard/profile`} className="card-actions">
+                                        <button className="btn btn-accent text-white btn-block">Dashboard</button>
+                                    </Link>
+                                    <div className="card-actions">
+                                        <button
+                                            onClick={() => {
+                                                handleLogout();
+                                                setIsMenuOpen(false);
+                                            }}
+                                            className="btn btn-error text-white btn-block">Logout</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>)
+                        : (
+                            <Link
+                                to={`/auth/signup`}
+                            >
+                                <button
+                                    onClick={() => setIsMenuOpen(false)}
+                                    className="btn btn-sm btn-accent text-white border-none"
+                                >Join Us</button>
+                            </Link>
+                        )
                     )}
                 </ul>
 
-                <div className="flex lg:hidden items-center gap-1 sm:gap-3">
+                <div className="flex lg:hidden items-center gap-2 sm:gap-3">
                     <label className="swap swap-rotate">
                         {/* this hidden checkbox controls the state */}
                         <input type="checkbox" className="theme-controller" value="dark" />
@@ -205,22 +233,48 @@ const Navbar = () => {
                     </label>
 
                     {/* Avatar */}
-                    {(user &&
-                        <div className="dropdown dropdown-end lg:hidden">
+                    {(user ?
+                        (<div className="dropdown dropdown-end">
                             <div tabIndex={0} role="button" className="btn btn-ghost btn-circle avatar">
-                                <div className="w-8 rounded-full">
+                                <div className="w-10 rounded-full">
                                     <img
                                         alt={user.displayName}
                                         src={user.photoURL} />
                                 </div>
                             </div>
-                            <ul
+                            <div
                                 tabIndex={0}
-                                className="menu menu-sm dropdown-content bg-base-100 rounded-[10px] z-[1] mt-3 w-64 p-2 shadow">
-                                <p>User Name: {user.displayName}</p>
-                                <p>Email: {user.email}</p>
-                            </ul>
-                        </div>
+                                className="card card-compact dropdown-content bg-base-100 text-base-content z-1 mt-3 w-52 shadow">
+                                <div className="card-body p-4">
+                                    <div className="card-actions">
+                                        <button className="btn btn-ghost btn-block">
+                                            <FaUser /> {user.displayName.split(" ")[0]}
+                                        </button>
+                                    </div>
+                                    <Link to={`/dashboard/profile`} className="card-actions">
+                                        <button className="btn btn-accent text-white btn-block">Dashboard</button>
+                                    </Link>
+                                    <div className="card-actions">
+                                        <button
+                                            onClick={() => {
+                                                handleLogout();
+                                                setIsMenuOpen(false);
+                                            }}
+                                            className="btn btn-error text-white btn-block">Logout</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>)
+                        : (
+                            <Link
+                                to={`/auth/signup`}
+                            >
+                                <button
+                                    onClick={() => setIsMenuOpen(false)}
+                                    className="btn btn-xs sm:btn-sm btn-accent text-white border-none"
+                                >Join Us</button>
+                            </Link>
+                        )
                     )}
 
                     {/* Mobile Menu Button */}
@@ -236,7 +290,7 @@ const Navbar = () => {
             {/* Dropdown for Small Devices */}
             <div
                 className={`fixed top-0 left-0 w-full z-50 transition-transform duration-300 ${isMenuOpen && window.innerWidth < 768 ? "translate-y-0" : "translate-y-[-100%]"
-                    } bg-white/95 text-black p-14 h-[20rem] md:hidden`}
+                    } bg-white/95 text-black p-14 h-[11rem] md:hidden`}
                 // ${user ? 'h-[22rem]' : 'h-44'} 
                 style={{ zIndex: 1000 }}
             >

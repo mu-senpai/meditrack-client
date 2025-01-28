@@ -1,21 +1,45 @@
 import { motion } from "framer-motion";
 import { useForm } from "react-hook-form";
 import useAxiosSecure from "../../hooks/useAxiosSecure";
+import { useContext } from "react";
+import { AuthContext } from "../../providers/AuthProvider";
+import { useQuery } from "@tanstack/react-query";
+import Swal from "sweetalert2";
 
 export default function RegistrationModal(props = {}) {
+    const { user } = useContext(AuthContext);
     const { camp } = props || {};
     const { register, handleSubmit, reset } = useForm();
     const axiosSecure = useAxiosSecure();
 
+    const { data: userData = {}, refetch } = useQuery({
+        queryKey: ["userProfile", user?.email],
+        queryFn: async () => {
+            const res = await axiosSecure.get(`/users/${user?.email}`);
+            refetch();
+            return res.data;
+        },
+        enabled: !!user?.email,
+    });
+
     const onSubmit = (data) => {
         data.campId = camp._id;
+        data.status = "Pending";
+        data.paymentStatus = "Unpaid";
+        data.feedback = null;
+        data.registrationTime = new Date().toISOString();
+        data.paymentTime = null;
+        data.paymentId = null;
 
         const handleRegistration = async (registrationData) => {
             try {
                 const response = await axiosSecure.post('/register-camp', registrationData);
                 if (response.data.success) {
                     reset();
-                    alert('Registration successful!');
+                    Swal.fire({
+                        icon: 'success',
+                        title: 'Registration successful!',
+                    });
                 }
             } catch (error) {
                 console.error('Registration failed:', error);
@@ -68,6 +92,7 @@ export default function RegistrationModal(props = {}) {
                             <label className="label text-sm">Location</label>
                             <input
                                 type="text"
+                                {...register("location", { required: true })}
                                 value={camp.location}
                                 readOnly
                                 className="input input-bordered w-full"
@@ -89,7 +114,7 @@ export default function RegistrationModal(props = {}) {
                             <input
                                 type="text"
                                 {...register("participantName", { required: true })}
-                                value={camp.campName}
+                                value={userData.name}
                                 readOnly
                                 className="input input-bordered w-full"
                             />
@@ -100,7 +125,7 @@ export default function RegistrationModal(props = {}) {
                             <input
                                 type="text"
                                 {...register("participantEmail", { required: true })}
-                                value={camp.campName}
+                                value={userData.email}
                                 readOnly
                                 className="input input-bordered w-full"
                             />
@@ -167,6 +192,7 @@ export default function RegistrationModal(props = {}) {
                         <motion.button
                             type="submit"
                             whileTap={{ scale: 0.95 }}
+                            disabled={userData?.role === "admin"}
                             className="btn btn-accent text-white"
                         >
                             Register

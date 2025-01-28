@@ -2,30 +2,61 @@ import { motion } from "framer-motion";
 import { useAxiosPublic } from "../../hooks/useAxiosPublic";
 import CampCard from "../../components/CampCard/CampCard";
 import { useQuery } from "@tanstack/react-query";
-import LoadingPage from "../../components/LoadingPage/LoadingPage";
+import { useState } from "react";
 
 const AvailableCamps = () => {
     const axiosPublic = useAxiosPublic();
+    const [search, setSearch] = useState("");
+    const [sortBy, setSortBy] = useState("participantCount");
+    const [order, setOrder] = useState("desc");
+    const [page, setPage] = useState(1);
+    const [layout, setLayout] = useState("lg:grid-cols-3"); // Default is 3 columns for larger screens
+    const limit = 10;
 
-    const { data: camps = {}, isLoading } = useQuery({
-        queryKey: ["camps"],
+    const {
+        data,
+        isFetching,
+        refetch
+    } = useQuery({
+        queryKey: ["camps", search, sortBy, order, page],
         queryFn: async () => {
-            const res = await axiosPublic.get("/camps");
+            const res = await axiosPublic.get(
+                `/camps?search=${search}&sortBy=${sortBy}&order=${order}&page=${page}&limit=${limit}`
+            );
             return res.data;
         },
+        keepPreviousData: true,
     });
 
-    if (isLoading) {
-        return <LoadingPage></LoadingPage>;
-    }
+    const handleSearch = (e) => {
+        setSearch(e.target.value);
+        refetch();
+    };
+
+    const handleSort = (e) => {
+        setSortBy(e.target.value);
+        refetch();
+    };
+
+    const handleOrder = (e) => {
+        setOrder(e.target.value);
+        refetch();
+    };
+
+    const handlePageChange = (newPage) => {
+        setPage(newPage);
+        refetch();
+    };
+
+    // Toggle layout for large screens
+    const toggleLayout = () => {
+        setLayout((prevLayout) =>
+            prevLayout === "xl:grid-cols-4" ? "xl:grid-cols-3" : "xl:grid-cols-4"
+        );
+    };
 
     return (
-        <motion.div
-            className="min-h-screen"
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ duration: 0.5 }}
-        >
+        <div className="min-h-screen">
             {/* Header Section */}
             <div className="bg-accent relative">
                 <div className="w-[90%] mx-auto pt-36 pb-24 text-center lg:text-left text-white">
@@ -51,24 +82,81 @@ const AvailableCamps = () => {
                         initial={{ opacity: 0 }}
                         animate={{ opacity: 1 }}
                         transition={{ duration: 0.6 }}
-                        className="h-full" src="https://i.ibb.co.com/JFhHWG8/image.png" />
+                        className="h-full"
+                        src="https://i.ibb.co/NKHxZk7/image-1.png"
+                    />
                 </div>
             </div>
 
+            {/* Search & Sorting Controls */}
+            <motion.div
+                className="w-[90%] mx-auto flex flex-col md:flex-row items-center justify-between gap-4 pt-10 sm:pt-14 md:pt-16 xl:pt-20"
+                layout
+            >
+                <input
+                    type="text"
+                    placeholder="Search camps..."
+                    value={search}
+                    onChange={handleSearch}
+                    className="w-full input input-bordered transition-all duration-200"
+                />
+                <select
+                    value={sortBy}
+                    onChange={handleSort}
+                    className="w-full select select-bordered md:max-w-xs transition-all duration-200"
+                >
+                    <option value="participantCount">Most Registered</option>
+                    <option value="campFees">Camp Fees</option>
+                    <option value="campName">Alphabetical Order</option>
+                </select>
+                <select
+                    value={order}
+                    onChange={handleOrder}
+                    className="w-full select select-bordered md:max-w-xs transition-all duration-200"
+                >
+                    <option value="desc">Descending</option>
+                    <option value="asc">Ascending</option>
+                </select>
+            </motion.div>
+
+            {/* Layout Toggle Button for Large Screens */}
+            <div className="w-[90%] mx-auto flex justify-end pt-4">
+                <button
+                    className="hidden xl:block btn btn-outline hover:text-white btn-accent"
+                    onClick={toggleLayout}
+                >
+                    Toggle Layout
+                </button>
+            </div>
+
             {/* Camps Section */}
-            <div className="w-[90%] mx-auto py-10 sm:py-14 md:py-16 xl:py-20">
-                {camps.length > 0 ? (
-                    <div
-                        className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 2xl:grid-cols-4 gap-8"
+            <motion.div
+                className="w-[90%] mx-auto py-14"
+                layout
+            >
+                {isFetching ? (
+                    <div className="w-full h-[40rem] flex items-center justify-center">
+                        <span className="loading loading-ring loading-lg"></span>
+                    </div>
+                ) : data?.camps?.length > 0 ? (
+                    <motion.div
+                        className={`grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 ${layout} gap-8`}
+                        initial={{ opacity: 0 }}
+                        animate={{ opacity: 1 }}
+                        transition={{ duration: 0.5 }}
+                        layout
                     >
-                        {camps.map((camp) => (
-                            <div
+                        {data.camps.map((camp) => (
+                            <motion.div
                                 key={camp._id}
+                                initial={{ opacity: 0, scale: 0.9 }}
+                                animate={{ opacity: 1, scale: 1 }}
+                                transition={{ duration: 0.4 }}
                             >
                                 <CampCard camp={camp} />
-                            </div>
+                            </motion.div>
                         ))}
-                    </div>
+                    </motion.div>
                 ) : (
                     <motion.div
                         className="text-center text-gray-500 dark:text-gray-400"
@@ -79,8 +167,26 @@ const AvailableCamps = () => {
                         <p>No camps available at the moment.</p>
                     </motion.div>
                 )}
-            </div>
-        </motion.div>
+            </motion.div>
+
+            {/* Pagination Controls */}
+            <motion.div
+                className="flex justify-center gap-2 pb-10 sm:pb-14 md:pb-16 xl:pb-20"
+                layout
+            >
+                {[...Array(data?.totalPages)].map((_, index) => (
+                    <motion.button
+                        key={index}
+                        className={`btn ${page === index + 1 ? "btn-accent" : "btn-outline"} mx-1`}
+                        onClick={() => handlePageChange(index + 1)}
+                        whileHover={{ scale: 1.1 }}
+                        whileTap={{ scale: 0.95 }}
+                    >
+                        {index + 1}
+                    </motion.button>
+                ))}
+            </motion.div>
+        </div>
     );
 };
 

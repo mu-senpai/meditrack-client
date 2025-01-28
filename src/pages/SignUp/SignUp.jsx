@@ -1,12 +1,11 @@
 import { useForm } from "react-hook-form";
 import { motion } from "framer-motion";
+import { loadCaptchaEnginge, LoadCanvasTemplate, validateCaptcha } from 'react-simple-captcha';
 import { Link, useNavigate } from "react-router-dom";
 import { useAxiosPublic } from "../../hooks/useAxiosPublic";
-import { useContext } from "react";
+import { useContext, useEffect, useState } from "react";
 import { AuthContext } from "../../providers/AuthProvider";
 import Swal from "sweetalert2";
-import { toast, ToastContainer } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
 
 const image_hosting_key = import.meta.env.VITE_IMAGE_HOSTING_KEY;
 const image_hosting_api = `https://api.imgbb.com/1/upload?key=${image_hosting_key}`;
@@ -14,10 +13,27 @@ const image_hosting_api = `https://api.imgbb.com/1/upload?key=${image_hosting_ke
 const SignUp = () => {
     const axiosPublic = useAxiosPublic();
     const { register, handleSubmit, reset, formState: { errors } } = useForm();
-    const { createUser, updateUserProfile } = useContext(AuthContext);
+    const { createUser, updateUserProfile, googleSignIn } = useContext(AuthContext);
     const navigate = useNavigate();
+    const [captchaInput, setCaptchaInput] = useState("");
+
+    const from = location.state?.from?.pathname || "/";
+
+    useEffect(() => {
+        loadCaptchaEnginge(6);
+    }, [])
 
     const onSubmit = async (data) => {
+
+        if (!validateCaptcha(captchaInput)) {
+            Swal.fire({
+                icon: "error",
+                title: "Invalid Captcha",
+                text: "Please enter the correct captcha.",
+            });
+            return;
+        }
+
         const imageFile = data.image[0];
         const formData = new FormData();
         formData.append("image", imageFile);
@@ -42,9 +58,9 @@ const SignUp = () => {
                                     role: 'user'
                                 };
 
-                                axiosPublic.post('/users', userInfo)
+                                axiosPublic.put('/users', userInfo)
                                     .then((res) => {
-                                        if (res.data.insertedId) {
+                                        if (res.data.upsertedCount || res.data.modifiedCount) {
                                             reset();
                                             Swal.fire({
                                                 icon: 'success',
@@ -52,25 +68,76 @@ const SignUp = () => {
                                                 showConfirmButton: false,
                                                 timer: 1500
                                             });
-                                            navigate('/');
+                                            navigate(from, { replace: true });
                                         }
                                     });
                             })
-                            .catch((error) => toast.error(error.message));
+                            .catch((error) => {
+                                Swal.fire({
+                                    icon: 'error',
+                                    title: error.message,
+                                    showConfirmButton: false,
+                                    timer: 1500
+                                });
+                            });
                     });
             }
         } catch (error) {
-            toast.error("Image upload failed. Please try again.");
+            Swal.fire({
+                icon: 'error',
+                title: error.message,
+                showConfirmButton: false,
+                timer: 1500
+            });
         }
     };
 
     const handleGoogleSignup = () => {
-        console.log("Google signup clicked");
-        // Add logic for Google authentication here
+        googleSignIn()
+            .then(async (result) => {
+                const user = result.user;
+                const userInfo = {
+                    name: user.displayName,
+                    email: user.email,
+                    photoURL: user.photoURL,
+                    phone: user.phoneNumber || "N/A",
+                    uid: user.uid,
+                    createdAt: new Date().toISOString(),
+                    role: 'user'
+                };
+
+                try {
+                    const res = await axiosPublic.put('/users', userInfo);
+                    if (res.data.upsertedCount || res.data.modifiedCount) {
+                        Swal.fire({
+                            icon: 'success',
+                            title: 'Logged in successfully!',
+                            showConfirmButton: false,
+                            timer: 1500
+                        });
+                        navigate(from, { replace: true });
+                    }
+                } catch (error) {
+                    Swal.fire({
+                        icon: 'error',
+                        title: error.message,
+                        showConfirmButton: false,
+                        timer: 1500
+                    });
+                }
+            })
+            .catch((error) => {
+                Swal.fire({
+                    icon: 'error',
+                    title: error.message,
+                    showConfirmButton: false,
+                    timer: 1500
+                });
+            });
     };
 
     return (
-        <div className="flex flex-col md:flex-row h-[90rem] md:h-[60rem] 2xl:h-screen bg-base-100">
+        <div className="flex flex-col md:flex-row h-[100rem] md:h-[70rem] bg-base-100">
             {/* Left Section */}
             <div className="md:w-1/2 w-full h-[40%] md:h-full bg-accent flex items-center justify-center p-6 relative">
                 <motion.img
@@ -86,7 +153,7 @@ const SignUp = () => {
                     animate={{ opacity: 1 }}
                     transition={{ duration: 0.5 }}
                     className="absolute top-0 right-0 h-[50%] object-contain"
-                    src="https://i.ibb.co/JFhHWG8/image.png"
+                    src="https://i.ibb.co/NKHxZk7/image-1.png"
                 />
             </div>
 
@@ -103,71 +170,68 @@ const SignUp = () => {
                         Create an Account
                     </h2>
                     <div className="form-control">
-                        <label className="label">
-                            <span className="label-text">Name</span>
-                        </label>
+                        <label className="label">Name</label>
                         <input
                             type="text"
                             {...register("name", { required: true })}
                             placeholder="Enter your name"
                             className="input input-bordered w-full"
                         />
-                        {errors.name && <span className="text-sm text-red-600">Name is required</span>}
+                        {errors.name && <p className="text-red-600 mt-2">Name is required</p>}
                     </div>
                     <div className="form-control">
-                        <label className="label">
-                            <span className="label-text">Email</span>
-                        </label>
+                        <label className="label">Email</label>
                         <input
                             type="email"
                             {...register("email", { required: true })}
                             placeholder="Enter your email"
                             className="input input-bordered w-full"
                         />
-                        {errors.email && <span className="text-sm text-red-600">Email is required</span>}
+                        {errors.email && <p className="text-red-600 mt-2">Email is required</p>}
                     </div>
                     <div className="form-control">
-                        <label className="label">
-                            <span className="label-text">Phone</span>
-                        </label>
+                        <label className="label">Phone</label>
                         <input
                             type="text"
                             {...register("phone", { required: true })}
                             placeholder="Enter your phone number"
                             className="input input-bordered w-full"
                         />
-                        {errors.phone && <span className="text-sm text-red-600">Phone number is required</span>}
+                        {errors.phone && <p className="text-red-600 mt-2">Phone number is required</p>}
                     </div>
                     <div className="form-control">
-                        <label className="label">
-                            <span className="label-text">Photo</span>
-                        </label>
+                        <label className="label">Photo</label>
                         <input
                             type="file"
                             {...register("image", { required: true })}
                             className="file-input file-input-bordered w-full"
                         />
-                        {errors.image && <span className="text-sm text-red-600">Photo is required</span>}
+                        {errors.image && <p className="text-red-600 mt-2">Photo is required</p>}
                     </div>
                     <div className="form-control">
                         <label className="label">
                             <span className="label-text">Password</span>
                         </label>
+                        <input type="password"  {...register("password", {
+                            required: true,
+                            minLength: 6,
+                            maxLength: 20,
+                            pattern: /(?=.*[A-Z])(?=.*[!@#$&*])(?=.*[0-9])(?=.*[a-z])/
+                        })} placeholder="Enter your password" className="input input-bordered w-full" />
+                        {errors.password?.type === 'required' && <p className="text-red-600 mt-2">Password is required</p>}
+                        {errors.password?.type === 'minLength' && <p className="text-red-600 mt-2">Password must be 6 characters</p>}
+                        {errors.password?.type === 'maxLength' && <p className="text-red-600 mt-2">Password must be less than 20 characters</p>}
+                        {errors.password?.type === 'pattern' && <p className="text-red-600 mt-2">Password must have one Uppercase one lower case, one number and one special character.</p>}
+                    </div>
+                    <div className="form-control">
+                        <label className="label">Captcha</label>
+                        <LoadCanvasTemplate />
                         <input
-                            type="password"
-                            {...register("password", {
-                                required: true,
-                                minLength: 6,
-                                maxLength: 20,
-                                pattern: /(?=.*[A-Z])(?=.*[!@#$&*])(?=.*[0-9])(?=.*[a-z])/
-                            })}
-                            placeholder="Enter your password"
-                            className="input input-bordered w-full"
+                            type="text"
+                            placeholder="Enter Captcha"
+                            className="input input-bordered w-full mt-2"
+                            onChange={(e) => setCaptchaInput(e.target.value)}
                         />
-                        {errors.password?.type === 'required' && <p className="text-red-600">Password is required</p>}
-                        {errors.password?.type === 'minLength' && <p className="text-red-600">Password must be 6 characters</p>}
-                        {errors.password?.type === 'maxLength' && <p className="text-red-600">Password must be less than 20 characters</p>}
-                        {errors.password?.type === 'pattern' && <p className="text-red-600">Password must have one uppercase, one lower case, one number and one special character</p>}
                     </div>
                     <button type="submit" className="btn btn-accent text-white w-full">
                         Create Account
@@ -178,7 +242,7 @@ const SignUp = () => {
                         className="btn btn-outline btn-accent hover:text-white w-full"
                         onClick={handleGoogleSignup}
                     >
-                        Sign Up with Google
+                        Login with Google
                     </button>
                     <p className="text-center mt-4">
                         Already registered?{" "}
@@ -188,7 +252,6 @@ const SignUp = () => {
                     </p>
                 </motion.form>
             </div>
-            <ToastContainer />
         </div>
     );
 };

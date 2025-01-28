@@ -34,7 +34,7 @@ export default function CampCard(props = {}) {
                 </div>
                 <div className="flex items-center gap-2 text-sm mt-2">
                     <FaUsers className="text-accent" />
-                    <span className="text-gray-400">{camp.participantCount} Participants</span>
+                    <span className="text-gray-400">{camp.participantCount} {camp.participantCount > 1 ? "Participants" : "Participant"}</span>
                 </div>
                 <div className="card-actions mt-6">
                     <Link className="w-full" to={`/camp-details/${camp._id}`}>
