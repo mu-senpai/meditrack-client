@@ -154,7 +154,7 @@ const ProfilePage = () => {
                 className="modal"
             >
                 <form onSubmit={handleSubmit(onSubmit)} className="modal-box bg-base-100 p-6 rounded-lg shadow-lg">
-                    <h3 className="font-bold text-lg mb-4">Edit Profile</h3>
+                    <h3 className="text-2xl font-bold text-accent mb-4">Edit Profile</h3>
                     <div className="form-control">
                         <label className="label">
                             <span className="label-text">Name</span>
