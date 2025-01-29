@@ -138,7 +138,7 @@ const Dashboard = () => {
                                 </div>
                             </Link>
                             <button className="btn btn-sm btn-ghost btn-circle lg:hidden text-2xl" onClick={toggleSidebar}>
-                                <FaBars color="#FFFFFF" />
+                                <FaBars color="#FFFFFF" size={15} />
                             </button>
                         </div>
                     </div>
