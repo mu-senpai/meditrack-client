@@ -133,7 +133,7 @@ const Dashboard = () => {
                         </div>
                         <div className="flex items-center space-x-2 lg:space-x-4 ml-auto">
                             <Link to="/dashboard/profile" className="avatar cursor-pointer flex items-center space-x-2">
-                                <div className="w-7 lg:w-10 rounded-full">
+                                <div className="w-10 rounded-full">
                                     <img src={userData?.photoURL || "https://via.placeholder.com/150"} alt="User Avatar" />
                                 </div>
                             </Link>
