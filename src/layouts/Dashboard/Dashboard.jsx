@@ -114,7 +114,7 @@ const Dashboard = () => {
                         </>
                     )}
 
-                    <button onClick={() => {handleLogout; setIsSidebarOpen(false)}} className="flex cursor-pointer items-center p-4 rounded-md hover:bg-accent-focus">
+                    <button onClick={() => {handleLogout(); setIsSidebarOpen(false)}} className="flex cursor-pointer items-center p-4 rounded-md hover:bg-accent-focus">
                         <FaSignOutAlt className="mr-3" /> Logout
                     </button>
                 </nav>

@@ -40,8 +40,8 @@ const UserAnalytics = () => {
     const colors = ["#4CAF50", "#F44336"];
 
     return (
-        <div className="p-6 bg-base-100 min-h-screen">
-            <h2 className="text-3xl font-bold text-accent text-center mb-8">Analytics Dashboard</h2>
+        <div className="w-full p-6 bg-base-100 min-h-screen py-8 sm:py-12 md:py-14 xl:py-16">
+            <h2 className="text-2xl sm:text-3xl xl:text-4xl font-bold text-accent text-center mb-6 sm:mb-8 lg:mb-10 xl:mb-12">Analytics Dashboard</h2>
             
             <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-8">
                 {/* Bar Chart - Total Registered Camps */}
