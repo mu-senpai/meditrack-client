@@ -137,7 +137,7 @@ const Dashboard = () => {
                                     <img src={userData?.photoURL || "https://via.placeholder.com/150"} alt="User Avatar" />
                                 </div>
                             </Link>
-                            <button className="btn btn-sm btn-ghost btn-circle lg:hidden text-xl" onClick={toggleSidebar}>
+                            <button className="btn btn-sm btn-ghost btn-circle lg:hidden text-2xl" onClick={toggleSidebar}>
                                 <FaBars color="#FFFFFF" />
                             </button>
                         </div>
