@@ -60,7 +60,7 @@ const Dashboard = () => {
         <div className="w-full h-full min-h-screen bg-base-200">
             {/* Sidebar */}
             <div
-                className={`fixed top-0 left-0 z-50 h-screen bg-accent text-white w-64 lg:w-72 transform ${isSidebarOpen ? "translate-x-0" : "-translate-x-full"
+                className={`fixed top-0 left-0 z-50 h-screen bg-accent text-white w-64 lg:w-72 transform ${isSidebarOpen && window.innerWidth < 1024 ? "translate-x-0" : "-translate-x-full"
                     } lg:translate-x-0 transition-transform duration-300`}
             >
                 <div className="flex items-center justify-between p-4 shadow-md">
@@ -79,42 +79,42 @@ const Dashboard = () => {
 
                 <nav className="mt-4 space-y-1">
                     {/* Common for both Admin & User */}
-                    <NavLink to="/" className="flex items-center p-4 rounded-md hover:bg-accent-focus">
+                    <NavLink to="/" onClick={() => setIsSidebarOpen(false)} className="flex items-center p-4 rounded-md hover:bg-accent-focus">
                         <FaHome className="mr-3" /> Home
                     </NavLink>
-                    <NavLink to="/dashboard/profile" className="flex items-center p-4 rounded-md hover:bg-accent-focus">
+                    <NavLink to="/dashboard/profile" onClick={() => setIsSidebarOpen(false)} className="flex items-center p-4 rounded-md hover:bg-accent-focus">
                         <FaUser className="mr-3" /> Profile
                     </NavLink>
 
                     {/* Admin Routes */}
                     {isAdmin ? (
                         <>
-                            <NavLink to="/dashboard/add-camp" className="flex items-center p-4 rounded-md hover:bg-accent-focus">
+                            <NavLink to="/dashboard/add-camp" onClick={() => setIsSidebarOpen(false)} className="flex items-center p-4 rounded-md hover:bg-accent-focus">
                                 <FaPlus className="mr-3" /> Add Camp
                             </NavLink>
-                            <NavLink to="/dashboard/manage-camps" className="flex items-center p-4 rounded-md hover:bg-accent-focus">
+                            <NavLink to="/dashboard/manage-camps" onClick={() => setIsSidebarOpen(false)} className="flex items-center p-4 rounded-md hover:bg-accent-focus">
                                 <FaClipboardList className="mr-3" /> Manage Camps
                             </NavLink>
-                            <NavLink to="/dashboard/registered-camps-management" className="flex items-center p-4 rounded-md hover:bg-accent-focus">
+                            <NavLink to="/dashboard/registered-camps-management" onClick={() => setIsSidebarOpen(false)} className="flex items-center p-4 rounded-md hover:bg-accent-focus">
                                 <FaTasks className="mr-3" /> Manage Registrations
                             </NavLink>
                         </>
                     ) : (
                         <>
                             {/* User Routes */}
-                            <NavLink to="/dashboard/registered-camps" className="flex items-center p-4 rounded-md hover:bg-accent-focus">
+                            <NavLink to="/dashboard/registered-camps" onClick={() => setIsSidebarOpen(false)} className="flex items-center p-4 rounded-md hover:bg-accent-focus">
                                 <FaClipboardList className="mr-3" /> Registered Camps
                             </NavLink>
-                            <NavLink to="/dashboard/payment-history" className="flex items-center p-4 rounded-md hover:bg-accent-focus">
+                            <NavLink to="/dashboard/payment-history" onClick={() => setIsSidebarOpen(false)} className="flex items-center p-4 rounded-md hover:bg-accent-focus">
                                 <FaMoneyCheckAlt className="mr-3" /> Payment History
                             </NavLink>
-                            <NavLink to="/dashboard/analytics" className="flex items-center p-4 rounded-md hover:bg-accent-focus">
+                            <NavLink to="/dashboard/analytics" onClick={() => setIsSidebarOpen(false)} className="flex items-center p-4 rounded-md hover:bg-accent-focus">
                                 <FaChartBar className="mr-3" /> Analytics
                             </NavLink>
                         </>
                     )}
 
-                    <button onClick={handleLogout} className="flex cursor-pointer items-center p-4 rounded-md hover:bg-accent-focus">
+                    <button onClick={() => {handleLogout; setIsSidebarOpen(false)}} className="flex cursor-pointer items-center p-4 rounded-md hover:bg-accent-focus">
                         <FaSignOutAlt className="mr-3" /> Logout
                     </button>
                 </nav>
