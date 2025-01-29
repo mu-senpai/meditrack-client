@@ -1,15 +1,16 @@
 import { useContext, useEffect, useState } from "react";
+import { motion } from "framer-motion";
 import { AuthContext } from "../../providers/AuthProvider";
 import useAxiosSecure from "../../hooks/useAxiosSecure";
-import { 
-    BarChart, Bar, XAxis, YAxis, Tooltip, PieChart, Pie, Cell, Legend, LineChart, Line, CartesianGrid, ResponsiveContainer 
+import {
+    BarChart, Bar, XAxis, YAxis, Tooltip, PieChart, Pie, Cell, Legend, LineChart, Line, CartesianGrid, ResponsiveContainer
 } from "recharts";
 
 const UserAnalytics = () => {
     const { user } = useContext(AuthContext);
     const axiosSecure = useAxiosSecure();
     const [campData, setCampData] = useState([]);
-    
+
     useEffect(() => {
         if (user?.email) {
             axiosSecure.get(`/registered-camps/${user.email}`)
@@ -41,24 +42,36 @@ const UserAnalytics = () => {
 
     return (
         <div className="w-full p-6 bg-base-100 min-h-screen py-8 sm:py-12 md:py-14 xl:py-16">
-            <h2 className="text-2xl sm:text-3xl xl:text-4xl font-bold text-accent text-center mb-6 sm:mb-8 lg:mb-10 xl:mb-12">Analytics Dashboard</h2>
-            
+            <motion.h2
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                transition={{ duration: 0.5 }}
+                className="text-2xl sm:text-3xl xl:text-4xl font-bold text-accent text-center mb-6 sm:mb-8 lg:mb-10 xl:mb-12">Analytics Dashboard</motion.h2>
+
             <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-8">
                 {/* Bar Chart - Total Registered Camps */}
-                <div className="bg-base-100 z-10 hover:shadow-[0_4px_15px_rgba(0,211,187,0.5)] shadow-lg rounded-xl p-6">
+                <motion.div
+                    initial={{ opacity: 0, scale: 0.95 }}
+                    animate={{ opacity: 1, scale: 1 }}
+                    transition={{ duration: 0.5, ease: "easeOut" }}
+                    className="bg-base-100 z-10 hover:shadow-[0_4px_15px_rgba(0,211,187,0.5)] shadow-lg rounded-xl p-6">
                     <h3 className="text-lg font-semibold text-center mb-4">Total Camps Registered</h3>
                     <ResponsiveContainer width="100%" height={250}>
-                        <BarChart data={[{ name: "Registered", count: totalRegisteredCamps }]}> 
+                        <BarChart data={[{ name: "Registered", count: totalRegisteredCamps }]}>
                             <XAxis dataKey="name" />
                             <YAxis allowDecimals={false} />
                             <Tooltip />
                             <Bar dataKey="count" fill="#4C51BF" />
                         </BarChart>
                     </ResponsiveContainer>
-                </div>
+                </motion.div>
 
                 {/* Pie Chart - Camp Fees Distribution */}
-                <div className="bg-base-100 z-10 hover:shadow-[0_4px_15px_rgba(0,211,187,0.5)] shadow-lg rounded-xl p-6">
+                <motion.div
+                    initial={{ opacity: 0, scale: 0.95 }}
+                    animate={{ opacity: 1, scale: 1 }}
+                    transition={{ duration: 0.5, ease: "easeOut" }}
+                    className="bg-base-100 z-10 hover:shadow-[0_4px_15px_rgba(0,211,187,0.5)] shadow-lg rounded-xl p-6">
                     <h3 className="text-lg font-semibold text-center mb-4">Camp Fees Distribution</h3>
                     <ResponsiveContainer width="100%" height={250}>
                         <PieChart>
@@ -66,10 +79,14 @@ const UserAnalytics = () => {
                             <Tooltip />
                         </PieChart>
                     </ResponsiveContainer>
-                </div>
+                </motion.div>
 
                 {/* Donut Chart - Payment Status */}
-                <div className="bg-base-100 z-10 hover:shadow-[0_4px_15px_rgba(0,211,187,0.5)] shadow-lg rounded-xl p-6">
+                <motion.div
+                    initial={{ opacity: 0, scale: 0.95 }}
+                    animate={{ opacity: 1, scale: 1 }}
+                    transition={{ duration: 0.5, ease: "easeOut" }}
+                    className="bg-base-100 z-10 hover:shadow-[0_4px_15px_rgba(0,211,187,0.5)] shadow-lg rounded-xl p-6">
                     <h3 className="text-lg font-semibold text-center mb-4">Payment Status Breakdown</h3>
                     <ResponsiveContainer width="100%" height={250}>
                         <PieChart>
@@ -82,10 +99,14 @@ const UserAnalytics = () => {
                             <Legend />
                         </PieChart>
                     </ResponsiveContainer>
-                </div>
+                </motion.div>
 
                 {/* Line Chart - Registrations Over Time */}
-                <div className="bg-base-100 z-10 hover:shadow-[0_4px_15px_rgba(0,211,187,0.5)] shadow-lg rounded-xl p-6 col-span-1 md:col-span-2 xl:col-span-3">
+                <motion.div
+                    initial={{ opacity: 0, scale: 0.95 }}
+                    animate={{ opacity: 1, scale: 1 }}
+                    transition={{ duration: 0.5, ease: "easeOut" }}
+                    className="bg-base-100 z-10 hover:shadow-[0_4px_15px_rgba(0,211,187,0.5)] shadow-lg rounded-xl p-6 col-span-1 md:col-span-2 xl:col-span-3">
                     <h3 className="text-lg font-semibold text-center mb-4">Registrations Over Time</h3>
                     <ResponsiveContainer width="100%" height={250}>
                         <LineChart data={monthlyData}>
@@ -97,7 +118,7 @@ const UserAnalytics = () => {
                             <Line type="monotone" dataKey="registrations" stroke="#8884d8" strokeWidth={2} />
                         </LineChart>
                     </ResponsiveContainer>
-                </div>
+                </motion.div>
             </div>
         </div>
     );
