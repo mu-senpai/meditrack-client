@@ -7,6 +7,7 @@ import Swal from "sweetalert2";
 import { useAxiosPublic } from "../../hooks/useAxiosPublic";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import ScrollToTop from "../../components/ScrollToTop/ScrollToTop";
 
 const Login = () => {
     const { register, handleSubmit } = useForm();
@@ -156,6 +157,7 @@ const Login = () => {
                     </p>
                 </motion.form>
             </div>
+            <ScrollToTop></ScrollToTop>
         </div>
     );
 };

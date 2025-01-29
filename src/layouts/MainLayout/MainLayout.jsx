@@ -1,7 +1,7 @@
 import { Outlet } from "react-router-dom";
 import Navbar from "../../components/Navbar/Navbar";
-import CampCard from "../../components/CampCard/CampCard";
 import Footer from "../../components/Footer/Footer";
+import ScrollToTop from "../../components/ScrollToTop/ScrollToTop";
 
 const MainLayout = () => {
     return (
@@ -9,6 +9,7 @@ const MainLayout = () => {
             <Navbar></Navbar>
             <Outlet></Outlet>
             <Footer></Footer>
+            <ScrollToTop></ScrollToTop>
         </div>
     );
 };

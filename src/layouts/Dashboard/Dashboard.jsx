@@ -16,6 +16,7 @@ import { AuthContext } from "../../providers/AuthProvider";
 import useAxiosSecure from "../../hooks/useAxiosSecure";
 import { useQuery } from "@tanstack/react-query";
 import useAdmin from "../../hooks/useAdmin";
+import ScrollToTop from "../../components/ScrollToTop/ScrollToTop";
 
 const Dashboard = () => {
     const [isSidebarOpen, setIsSidebarOpen] = useState(false);
@@ -150,6 +151,7 @@ const Dashboard = () => {
                     </section>
                 </div>
             </div>
+            <ScrollToTop></ScrollToTop>
         </div>
     );
 };

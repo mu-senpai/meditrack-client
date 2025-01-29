@@ -45,7 +45,7 @@ const FeedbackSection = () => {
                     {feedbacks.map((feedback) => (
                         <SwiperSlide key={feedback._id}>
                             <motion.div
-                                className="bg-base-100 p-8 rounded-lg shadow-xl w-full md:w-3/4 h-[25rem] sm:h-[20rem] xl:h-[18rem] mx-auto"
+                                className="bg-base-100 p-8 rounded-lg shadow-xl w-full md:w-3/4 h-[25rem] sm:h-[20rem] xl:h-[18rem] flex flex-col justify-between mx-auto"
                                 initial={{ opacity: 0, scale: 0.8 }}
                                 whileInView={{ opacity: 1, scale: 1 }}
                                 transition={{ duration: 0.6 }}

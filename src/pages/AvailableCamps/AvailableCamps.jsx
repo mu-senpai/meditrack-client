@@ -59,7 +59,7 @@ const AvailableCamps = () => {
         <div className="min-h-screen">
             {/* Header Section */}
             <div className="bg-accent relative">
-                <div className="w-[90%] mx-auto pt-36 pb-24 text-center lg:text-left text-white">
+                <div className="w-[90%] mx-auto pt-36 pb-24 text-center lg:text-left text-white z-10">
                     <motion.p
                         className="text-lg mb-2"
                         initial={{ y: -50, opacity: 0 }}
@@ -77,7 +77,7 @@ const AvailableCamps = () => {
                         Available Camps
                     </motion.h2>
                 </div>
-                <div className="h-full absolute top-0 right-0">
+                <div className="h-full absolute top-0 right-0 z-0">
                     <motion.img
                         initial={{ opacity: 0 }}
                         animate={{ opacity: 1 }}
@@ -177,7 +177,7 @@ const AvailableCamps = () => {
                 {[...Array(data?.totalPages)].map((_, index) => (
                     <motion.button
                         key={index}
-                        className={`btn ${page === index + 1 ? "btn-accent" : "btn-outline"} mx-1`}
+                        className={`btn ${page === index + 1 ? "btn-accent btn-white" : "btn-outline"} mx-1`}
                         onClick={() => handlePageChange(index + 1)}
                         whileHover={{ scale: 1.1 }}
                         whileTap={{ scale: 0.95 }}
