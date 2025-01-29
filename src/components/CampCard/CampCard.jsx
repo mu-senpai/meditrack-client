@@ -9,7 +9,8 @@ export default function CampCard(props = {}) {
         <motion.div
             className="card w-full bg-base-100 rounded-lg shadow-md hover:shadow-[0_4px_15px_rgba(0,211,187,0.5)] transition-shadow duration-300"
             initial={{ opacity: 0, y: 30 }}
-            animate={{ opacity: 1, y: 0 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            exit={{opacity: 0, y: -30}}
             whileHover={{ scale: 1.01 }}
             transition={{ duration: 0.4 }}
         >

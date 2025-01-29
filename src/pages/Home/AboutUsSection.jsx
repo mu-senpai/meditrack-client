@@ -18,8 +18,9 @@ const AboutUsSection = () => {
                 <motion.div
                     className="bg-base-100 shadow-md rounded-lg p-6 text-center transition-shadow duration-300 hover:shadow-[0_4px_15px_rgba(0,211,187,0.5)]"
                     initial={{ opacity: 0, y: 30 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    whileHover={{ scale: 1.02 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    exit={{ opacity: 0, y: -30 }}
+                    whileHover={{ scale: 1.01 }}
                     transition={{ duration: 0.4 }}
                 >
                     <FiClipboard className="text-accent w-16 h-16 mx-auto mb-4" />
@@ -33,8 +34,9 @@ const AboutUsSection = () => {
                 <motion.div
                     className="bg-base-100 shadow-md rounded-lg p-6 text-center transition-shadow duration-300 hover:shadow-[0_4px_15px_rgba(0,211,187,0.5)]"
                     initial={{ opacity: 0, y: 30 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    whileHover={{ scale: 1.02 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    exit={{ opacity: 0, y: -30 }}
+                    whileHover={{ scale: 1.01 }}
                     transition={{ duration: 0.4 }}
                 >
                     <FiShield className="text-accent w-16 h-16 mx-auto mb-4" />
@@ -48,8 +50,9 @@ const AboutUsSection = () => {
                 <motion.div
                     className="bg-base-100 md:col-span-2 xl:col-span-1 shadow-md rounded-lg p-6 text-center transition-shadow duration-300 hover:shadow-[0_4px_15px_rgba(0,211,187,0.5)]"
                     initial={{ opacity: 0, y: 30 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    whileHover={{ scale: 1.02 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    exit={{ opacity: 0, y: -30 }}
+                    whileHover={{ scale: 1.01 }}
                     transition={{ duration: 0.4 }}
                 >
                     <FiGlobe className="text-accent w-16 h-16 mx-auto mb-4" />
