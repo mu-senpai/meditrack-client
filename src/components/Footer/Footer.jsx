@@ -98,7 +98,7 @@ const Footer = () => {
             </footer>
             <footer className="footer footer-center pb-6 sm:pb-8 px-8 sm:px-10 lg:px-12">
                 <aside>
-                    <p>© {new Date().getFullYear()} - All right reserved by TechSphere Ltd</p>
+                    <p>© {new Date().getFullYear()} - All right reserved by MediTrack Ltd</p>
                 </aside>
             </footer>
         </section>

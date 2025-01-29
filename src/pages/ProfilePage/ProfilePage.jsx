@@ -78,13 +78,13 @@ const ProfilePage = () => {
 
     if (isLoading)
         return (
-            <div className="w-full h-full flex items-center justify-center">
+            <div className="w-full h-screen flex items-center justify-center">
                 <span className="loading loading-ring loading-lg"></span>
             </div>
         );
 
     return (
-        <div className="w-full flex flex-col items-center justify-center h-full bg-base-200">
+        <div className="w-full flex flex-col items-center justify-center h-screen bg-base-200">
             <motion.div
                 className="max-w-md w-[90%] sm:w-full"
                 initial={{ opacity: 0, scale: 0.95 }}

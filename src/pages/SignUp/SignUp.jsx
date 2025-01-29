@@ -137,9 +137,8 @@ const SignUp = () => {
     };
 
     return (
-        <div className="flex flex-col md:flex-row h-[100rem] md:h-[70rem] bg-base-100">
-            {/* Left Section */}
-            <div className="md:w-1/2 w-full h-[40%] md:h-full bg-accent flex items-center justify-center p-6 relative">
+        <div className="flex flex-col md:flex-row h-[90rem] md:h-[70rem] bg-base-100">
+            <div className="md:w-1/2 w-full h-[30%] md:h-full bg-accent flex items-center justify-center p-6 relative">
                 <motion.img
                     initial={{ opacity: 0, x: -30 }}
                     animate={{ opacity: 1, x: 0 }}
@@ -158,7 +157,7 @@ const SignUp = () => {
             </div>
 
             {/* Right Section */}
-            <div className="md:w-1/2 w-full h-[60%] md:h-full flex flex-col items-center justify-center p-6">
+            <div className="md:w-1/2 w-full h-[70%] md:h-full flex flex-col items-center justify-center p-6">
                 <motion.form
                     initial={{ opacity: 0, x: 30 }}
                     animate={{ opacity: 1, x: 0 }}

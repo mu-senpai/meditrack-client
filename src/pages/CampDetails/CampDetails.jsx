@@ -2,19 +2,19 @@ import { useParams } from "react-router-dom";
 import { motion } from "framer-motion";
 import { FaCalendarAlt, FaMapMarkerAlt, FaUserMd, FaDollarSign, FaUsers } from "react-icons/fa";
 import RegistrationModal from "./RegistrationModal";
-import useAxiosSecure from "../../hooks/useAxiosSecure";
 import { useQuery } from "@tanstack/react-query";
 import LoadingPage from "../../components/LoadingPage/LoadingPage";
+import { useAxiosPublic } from "../../hooks/useAxiosPublic";
 
 const CampDetails = () => {
     const { id } = useParams();
 
-    const axiosSecure = useAxiosSecure();
+    const axiosPublic = useAxiosPublic();
 
     const { data: camp = {}, isLoading } = useQuery({
         queryKey: ["campDetails", id],
         queryFn: async () => {
-            const res = await axiosSecure.get(`/camps/${id}`);
+            const res = await axiosPublic.get(`/camp-details/${id}`);
             return res.data;
         },
     });

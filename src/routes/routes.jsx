@@ -37,7 +37,7 @@ export const routes = createBrowserRouter([
         },
         {
             path: "camp-details/:id",
-            element: <CampDetails></CampDetails>
+            element: <PrivateRoute><CampDetails></CampDetails></PrivateRoute>,
         }
       ]
     },

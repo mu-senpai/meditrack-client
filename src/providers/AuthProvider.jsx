@@ -71,7 +71,7 @@ const AuthProvider = (props = {}) => {
         signIn,
         googleSignIn,
         logOut,
-        updateUserProfile
+        updateUserProfile,
     }
 
     return (
