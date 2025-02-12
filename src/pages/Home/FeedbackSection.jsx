@@ -19,7 +19,7 @@ const FeedbackSection = () => {
 
     return (
         <div className="w-full relative bg-cover lg:bg-fixed bg-center h-[55rem] md:h-[45rem] xl:h-[50rem] flex items-center justify-center"
-            style={{ backgroundImage: "url('https://i.ibb.co.com/dJw6XygQ/image.png')" }}>
+            style={{ backgroundImage: "url('/Feedback.webp')" }}>
 
             <div className="absolute inset-0 bg-black/60"></div>
 

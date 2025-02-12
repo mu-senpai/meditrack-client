@@ -5,12 +5,12 @@ import { Link } from "react-router-dom";
 export default function BannerCarousel() {
   const slides = [
     {
-      backgroundImage: "https://i.ibb.co.com/s2Nqw7r/image.png",
+      backgroundImage: "/Banner-1.webp",
       tagline: "Making Healthcare Accessible for All",
       description: "Over 10,000 lives transformed through 500+ medical camps worldwide.",
     },
     {
-      backgroundImage: "https://i.ibb.co.com/8g7KLpc/image.png",
+      backgroundImage: "/Banner-2.webp",
       tagline: "Join the Movement for Better Health",
       description: "Providing care in 30+ countries with millions of smiles delivered.",
     },
